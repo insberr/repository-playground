@@ -1,14 +1,11 @@
-# This workflow will promote whatever is at the tip of the staging channel to the live channel (production)
-
-name: Manually Promote Staging to Production
+name: Manually run workflow
 
 on:
   # This allows you to manually trigger the workflow
   workflow_dispatch:
-    # TODO mess with some input options maybe?
    inputs:
      version:
-       description: '[Unused] Staging version to promote to production'
+       description: 'Some input'
        type: string
        required: false
 
@@ -20,16 +17,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
+      - name: Install dependencies and build and stuff
+        run: echo "do stuff"
 
-      - name: Install firebase-tools
-        run: npm install --save react
-
-      - name: Input test
+      - name: Do something if input is provided
+        if: ${{ github.event.inputs.version != '' }}
         run: echo ${{ github.event.inputs.version }}
+      
+      - name: Do something if no input is provided
+        if: ${{ github.event.inputs.version == '' }}
+        run: echo "No input provided"
+    
     environment:
       name: production
       # Optional, adds a link in the workflow view
